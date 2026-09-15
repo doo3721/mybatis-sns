@@ -1,4 +1,4 @@
-name: mybatis-sns CI Pipeline
+name: 01 CI Pipeline
 
 on:
   push:
