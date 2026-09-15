@@ -57,10 +57,6 @@ public class PostServiceImpl implements PostService {
     @Transactional(rollbackFor = Exception.class)
     @PreAuthorize("hasRole('ADMIN') or @postServiceImpl.isAuthor(#id, authentication.principal.id)")
     public void updatePost(Long id, PostUpdateRequest dto) {
-        // 수정 대상 게시글 존재 여부 사전 검증
-//        if (postMapper.findById(id) == null) {
-//            throw new NoSuchElementException("수정할 게시글이 존재하지 않습니다. ID: " + id);
-//        }
         postMapper.update(id, dto.content(), dto.imageUrl());
     }
 
@@ -68,10 +64,6 @@ public class PostServiceImpl implements PostService {
     @Transactional(rollbackFor = Exception.class)
     @PreAuthorize("hasRole('ADMIN') or @postServiceImpl.isAuthor(#id, authentication.principal.id)")
     public void deletePost(Long id) {
-        // 삭제 대상 게시글 존재 여부 사전 검증
-//        if (postMapper.findById(id) == null) {
-//            throw new NoSuchElementException("삭제할 게시글이 존재하지 않습니다. ID: " + id);
-//        }
         postMapper.deleteById(id);
     }
 

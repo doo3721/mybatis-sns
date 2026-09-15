@@ -8,9 +8,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -56,6 +59,7 @@ class PostServiceTest {
 
     @Test
     @DisplayName("게시글 수정 테스트")
+    @WithMockUser(roles = "ADMIN")
     void updatePostTest() {
         // given
         Long postId = 1L;
@@ -72,16 +76,17 @@ class PostServiceTest {
 
     @Test
     @DisplayName("게시글 단건 삭제 테스트")
+    @WithUserDetails(value = "user1@example.com", userDetailsServiceBeanName = "customUserDetailsService")
     void deletePostTest() {
         // given
-        Long postId = 2L;
+        Long postId = 3L;
 
         // when
         postService.deletePost(postId);
 
         // then: 삭제된 게시글 조회 시 IllegalArgumentException 발생 검증
         assertThatThrownBy(() -> postService.getPostById(postId))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(NoSuchElementException.class)
                 .hasMessageContaining("존재하지 않는 게시글입니다.");
     }
 
@@ -96,8 +101,8 @@ class PostServiceTest {
 
         // then
         assertThatThrownBy(() -> postService.getPostById(4L))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(NoSuchElementException.class);
         assertThatThrownBy(() -> postService.getPostById(5L))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(NoSuchElementException.class);
     }
 }
