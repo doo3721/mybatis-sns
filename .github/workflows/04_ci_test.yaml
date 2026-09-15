@@ -2,7 +2,7 @@ name: 04 Integration Test Pipeline
 
 on:
   push:
-    branches: [ "feature/**" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
